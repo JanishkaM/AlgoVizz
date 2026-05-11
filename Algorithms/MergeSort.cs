@@ -11,73 +11,120 @@ namespace AlgoVizz.Algorithms
 {
     public class MergeSort
     {
+        private struct MergeWrite
+        {
+            public int Index;
+            public int Value;
+        }
+
         public static int Sort(List<Element> elements, AnimationManager animationManager, int tk)
         {
-            int ICount = 0;
-            ICount = MergeSortHelper(elements, 0, elements.Count - 1, animationManager, tk, ref ICount);
-            return ICount;
-        }
+            int iCount = 0;
+            var values = elements.Select(e => e.Value).ToArray();
+            var writes = new List<MergeWrite>();
 
-        private static int MergeSortHelper(List<Element> elements, int left, int right, 
-            AnimationManager animationManager, int tk, ref int ICount)
-        {
-            if (left < right)
+            foreach (var element in elements)
             {
-                int mid = left + (right - left) / 2;
-                MergeSortHelper(elements, left, mid, animationManager, tk, ref ICount);
-                MergeSortHelper(elements, mid + 1, right, animationManager, tk, ref ICount);
-                Merge(elements, left, mid, right, animationManager, tk, ref ICount);
+                element.VisualState = ElementVisualState.Normal;
             }
-            return ICount;
+
+            MergeSortHelper(values, 0, values.Length - 1, writes, ref iCount);
+
+            foreach (var write in writes)
+            {
+                int index = write.Index;
+                int targetValue = write.Value;
+
+                animationManager.QueueAction(() =>
+                {
+                    elements[index].VisualState = ElementVisualState.Current;
+                });
+
+                animationManager.QueueAction(() =>
+                {
+                    int panelHeight = elements[index].Start.Y;
+                    int targetY = panelHeight - targetValue;
+
+                    elements[index].Value = targetValue;
+                    elements[index].End = new Point(elements[index].End.X, targetY);
+                });
+
+                animationManager.QueueAction(() =>
+                {
+                    elements[index].VisualState = ElementVisualState.Normal;
+                });
+            }
+
+            animationManager.QueueAction(() =>
+            {
+                foreach (var element in elements)
+                {
+                    element.VisualState = ElementVisualState.Sorted;
+                }
+            });
+
+            return iCount;
         }
 
-        private static void Merge(List<Element> elements, int left, int mid, int right, 
-            AnimationManager animationManager, int tk, ref int ICount)
+        private static void MergeSortHelper(int[] values, int left, int right, List<MergeWrite> writes, ref int iCount)
         {
-            List<Element> temp = new List<Element>();
-            
-            int i = left;
-            int j = mid + 1;
-            
-            while (i <= mid && j <= right)
+            if (left >= right)
             {
-                if (elements[i].Value <= elements[j].Value)
+                return;
+            }
+
+            int mid = left + (right - left) / 2;
+            MergeSortHelper(values, left, mid, writes, ref iCount);
+            MergeSortHelper(values, mid + 1, right, writes, ref iCount);
+            Merge(values, left, mid, right, writes, ref iCount);
+        }
+
+        private static void Merge(int[] values, int left, int mid, int right, List<MergeWrite> writes, ref int iCount)
+        {
+            int[] leftPart = new int[mid - left + 1];
+            int[] rightPart = new int[right - mid];
+
+            Array.Copy(values, left, leftPart, 0, leftPart.Length);
+            Array.Copy(values, mid + 1, rightPart, 0, rightPart.Length);
+
+            int i = 0;
+            int j = 0;
+            int k = left;
+
+            while (i < leftPart.Length && j < rightPart.Length)
+            {
+                iCount++;
+                if (leftPart[i] <= rightPart[j])
                 {
-                    temp.Add(elements[i].Clone());
+                    values[k] = leftPart[i];
+                    writes.Add(new MergeWrite { Index = k, Value = leftPart[i] });
                     i++;
                 }
                 else
                 {
-                    temp.Add(elements[j].Clone());
+                    values[k] = rightPart[j];
+                    writes.Add(new MergeWrite { Index = k, Value = rightPart[j] });
                     j++;
                 }
-                ICount++;
+                k++;
             }
-            
-            while (i <= mid)
+
+            while (i < leftPart.Length)
             {
-                temp.Add(elements[i].Clone());
+                iCount++;
+                values[k] = leftPart[i];
+                writes.Add(new MergeWrite { Index = k, Value = leftPart[i] });
                 i++;
-                ICount++;
+                k++;
             }
-            
-            while (j <= right)
+
+            while (j < rightPart.Length)
             {
-                temp.Add(elements[j].Clone());
+                iCount++;
+                values[k] = rightPart[j];
+                writes.Add(new MergeWrite { Index = k, Value = rightPart[j] });
                 j++;
-                ICount++;
-            }
-            
-            for (int k = 0; k < temp.Count; k++)
-            {
-                int index = left + k;
-                Element tempElement = temp[k];
-                
-                animationManager.QueueAction(() =>
-                {
-                    elements[index] = tempElement;
-                    elements[index].SelectedOne(null, tk);
-                });
+                k++;
             }
         }
     }
