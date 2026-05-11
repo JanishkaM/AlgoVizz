@@ -325,5 +325,11 @@ namespace AlgoVizz
         private void label4_Click(object sender, EventArgs e)
         {
         }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            using var pathfindingForm = new PathfindingForm();
+            pathfindingForm.ShowDialog(this);
+        }
     }
 }
