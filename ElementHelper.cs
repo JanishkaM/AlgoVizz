@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace AlgoVizz
 {
@@ -24,48 +24,19 @@ namespace AlgoVizz
             elements[second].Value = tempValue;
         }
 
-        public static void SelectedOne(Element first, Graphics graphic, int tk, int speed)
+        public static void SelectedOne(Element first, int tk)
         {
-            var firstSelected = first.Clone();
-            firstSelected.SelectedOne(graphic, tk);
-            Thread.Sleep(speed);
-            firstSelected.Draw(graphic, tk);
-
+            // Just mark the element as selected, don't sleep
         }
-        public static void DrawSwap(Element first, Element second, Graphics graphic, int tk, int speed)
+
+        public static void DrawSwap(Element first, Element second, int tk)
         {
-            var firstClone = first.Clone();
-            var secondClone = second.Clone();
-            int temporary = firstClone.End.Y;
-
-            //Show selected
-            firstClone.Selected(graphic, tk);
-            secondClone.Selected(graphic, tk);
-            Thread.Sleep(speed);
-
-            //eraser
-            firstClone.Eraser(graphic, tk);
-            secondClone.Eraser(graphic, tk);
-            Thread.Sleep(speed);
-            //Thread.Sleep(ArrayOptions.Delayed);
-
-            //swap
-            firstClone.End = new Point(firstClone.End.X, second.End.Y);
-            secondClone.End = new Point(secondClone.End.X, temporary);
-            Thread.Sleep(speed);
-
-            //redraw
-            firstClone.Draw(graphic, tk);
-            secondClone.Draw(graphic, tk);
-
+            // Just perform the swap, don't sleep
         }
-        public static void KeepSelected(Element first, Graphics graphic, int tk, int speed)
-        {
-            var firstSelected = first.Clone();
-            firstSelected.SelectedOne(graphic, tk);
-            Thread.Sleep(speed);
-            //firstSelected.Draw(graphic, tk);
 
+        public static void KeepSelected(Element first, int tk)
+        {
+            // Just mark as selected, don't sleep
         }
     }
 }

@@ -41,6 +41,7 @@
             label1 = new Label();
             label2 = new Label();
             label3 = new Label();
+            label4 = new Label();
             SuspendLayout();
             // 
             // panel1
@@ -55,9 +56,9 @@
             // 
             button1.Location = new Point(9, 415);
             button1.Name = "button1";
-            button1.Size = new Size(75, 23);
+            button1.Size = new Size(141, 23);
             button1.TabIndex = 1;
-            button1.Text = "button1";
+            button1.Text = "Generate Random";
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click_1;
             // 
@@ -84,18 +85,19 @@
             // textBox1
             // 
             textBox1.Location = new Point(608, 197);
+            textBox1.Multiline = true;
             textBox1.Name = "textBox1";
-            textBox1.Size = new Size(180, 23);
+            textBox1.Size = new Size(180, 84);
             textBox1.TabIndex = 4;
             textBox1.TextChanged += textBox1_TextChanged_2;
             // 
             // button2
             // 
-            button2.Location = new Point(90, 415);
+            button2.Location = new Point(156, 415);
             button2.Name = "button2";
-            button2.Size = new Size(75, 23);
+            button2.Size = new Size(142, 23);
             button2.TabIndex = 5;
-            button2.Text = "button2";
+            button2.Text = "Start Animation";
             button2.UseVisualStyleBackColor = true;
             button2.Click += button2_Click_1;
             // 
@@ -111,24 +113,25 @@
             // 
             // button3
             // 
-            button3.Location = new Point(171, 415);
+            button3.Location = new Point(304, 415);
             button3.Name = "button3";
-            button3.Size = new Size(75, 23);
+            button3.Size = new Size(135, 23);
             button3.TabIndex = 7;
-            button3.Text = "button3";
+            button3.Text = "Manual Input";
             button3.UseVisualStyleBackColor = true;
             button3.Click += button3_Click_1;
             // 
             // textBox2
             // 
-            textBox2.Location = new Point(608, 226);
+            textBox2.Location = new Point(608, 287);
+            textBox2.Multiline = true;
             textBox2.Name = "textBox2";
-            textBox2.Size = new Size(180, 23);
+            textBox2.Size = new Size(180, 66);
             textBox2.TabIndex = 8;
             // 
             // textBox3
             // 
-            textBox3.Location = new Point(608, 255);
+            textBox3.Location = new Point(608, 386);
             textBox3.Name = "textBox3";
             textBox3.Size = new Size(180, 23);
             textBox3.TabIndex = 9;
@@ -140,9 +143,9 @@
             label1.AutoSize = true;
             label1.Location = new Point(608, 13);
             label1.Name = "label1";
-            label1.Size = new Size(38, 15);
+            label1.Size = new Size(58, 15);
             label1.TabIndex = 10;
-            label1.Text = "label1";
+            label1.Text = "Array Size";
             label1.Click += label1_Click_1;
             // 
             // label2
@@ -150,25 +153,36 @@
             label2.AutoSize = true;
             label2.Location = new Point(608, 69);
             label2.Name = "label2";
-            label2.Size = new Size(38, 15);
+            label2.Size = new Size(61, 15);
             label2.TabIndex = 11;
-            label2.Text = "label2";
+            label2.Text = "Algorithm";
             // 
             // label3
             // 
             label3.AutoSize = true;
             label3.Location = new Point(608, 128);
             label3.Name = "label3";
-            label3.Size = new Size(38, 15);
+            label3.Size = new Size(39, 15);
             label3.TabIndex = 12;
-            label3.Text = "label3";
+            label3.Text = "Speed";
             label3.Click += label3_Click_1;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(608, 368);
+            label4.Name = "label4";
+            label4.Size = new Size(66, 15);
+            label4.TabIndex = 13;
+            label4.Text = "Array Input";
+            label4.Click += label4_Click;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(label4);
             Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(label1);
@@ -203,5 +217,6 @@
         private Label label1;
         private Label label2;
         private Label label3;
+        private Label label4;
     }
 }
