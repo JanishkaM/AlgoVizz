@@ -13,55 +13,65 @@ namespace AlgoVizz.Algorithms
     {
         public static int Sort(List<Element> elements, AnimationManager animationManager, int tk)
         {
-            int ICount = 0;
+            int iCount = 0;
             int n = elements.Count;
+            var values = elements.Select(e => e.Value).ToArray();
+            var swapOperations = new List<(int Left, int Right)>();
 
-            for (int i = 1; i < n; ++i)
+            foreach (var element in elements)
             {
-                int currentIndex = i;
-                
-                // Queue action to highlight current element
-                animationManager.QueueAction(() =>
-                {
-                    elements[currentIndex].SelectedOne(null, tk);
-                });
-
-                int key = elements[i].Value;
-                int j = i - 1;
-
-                while (j >= 0 && elements[j].Value > key)
-                {
-                    int first = j;
-                    int second = j + 1;
-
-                    // Queue action to show selected elements
-                    animationManager.QueueAction(() =>
-                    {
-                        elements[first].Selected(null, tk);
-                        elements[second].Selected(null, tk);
-                    });
-
-                    // Queue action to perform swap
-                    animationManager.QueueAction(() =>
-                    {
-                        elements[first].End = new Point(elements[first].End.X, elements[second].End.Y);
-                        elements[second].End = new Point(elements[second].End.X, 
-                            elements[first].End.Y - (elements[second].End.Y - elements[first].End.Y));
-                        
-                        var tempValue = elements[first].Value;
-                        elements[first].Value = elements[second].Value;
-                        elements[second].Value = tempValue;
-                    });
-
-                    j = j - 1;
-                    ICount++;
-                }
-
-                elements[j + 1].Value = key;
-                ICount++;
+                element.VisualState = ElementVisualState.Normal;
             }
 
-            return ICount;
+            for (int i = 1; i < n; i++)
+            {
+                int k = i;
+                while (k > 0 && values[k - 1] > values[k])
+                {
+                    (values[k - 1], values[k]) = (values[k], values[k - 1]);
+                    swapOperations.Add((k - 1, k));
+                    k--;
+                    iCount++;
+                }
+
+                iCount++;
+            }
+
+            foreach (var (left, right) in swapOperations)
+            {
+                animationManager.QueueAction(() =>
+                {
+                    elements[left].VisualState = ElementVisualState.Comparing;
+                    elements[right].VisualState = ElementVisualState.Current;
+                });
+
+                animationManager.QueueAction(() =>
+                {
+                    int leftY = elements[left].End.Y;
+                    int rightY = elements[right].End.Y;
+
+                    elements[left].End = new Point(elements[left].End.X, rightY);
+                    elements[right].End = new Point(elements[right].End.X, leftY);
+
+                    (elements[left].Value, elements[right].Value) = (elements[right].Value, elements[left].Value);
+                });
+
+                animationManager.QueueAction(() =>
+                {
+                    elements[left].VisualState = ElementVisualState.Normal;
+                    elements[right].VisualState = ElementVisualState.Normal;
+                });
+            }
+
+            animationManager.QueueAction(() =>
+            {
+                foreach (var element in elements)
+                {
+                    element.VisualState = ElementVisualState.Sorted;
+                }
+            });
+
+            return iCount;
         }
     }
 }

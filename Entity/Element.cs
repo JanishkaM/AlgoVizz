@@ -8,12 +8,22 @@ using AlgoVizz;
 
 namespace AlgoVizz.Entity
 {
+    public enum ElementVisualState
+    {
+        Normal,
+        Comparing,
+        Current,
+        Sorted
+    }
+
     public class Element
     {
         public Point Start { get; set; }
         public Point End { get; set; }
 
         public int Value { get; set; }
+
+        public ElementVisualState VisualState { get; set; } = ElementVisualState.Normal;
 
         public Element(Point start, Point end, int value)
         {
@@ -22,12 +32,21 @@ namespace AlgoVizz.Entity
             Value = value;
         }
 
-        public Element Clone() => new Element(Start, End, Value);
+        public Element Clone() => new Element(Start, End, Value) { VisualState = VisualState };
 
         public void Draw(Graphics? graphics, int tk)
         {
             if (graphics is null) return;
-            using var pen = new Pen(Color.Red, tk);
+
+            Color color = VisualState switch
+            {
+                ElementVisualState.Comparing => Color.Green,
+                ElementVisualState.Current => Color.Purple,
+                ElementVisualState.Sorted => Color.Blue,
+                _ => Color.Red
+            };
+
+            using var pen = new Pen(color, tk);
             graphics.DrawLine(pen, Start, End);
         }
 
