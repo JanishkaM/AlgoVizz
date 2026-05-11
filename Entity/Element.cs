@@ -23,26 +23,32 @@ namespace AlgoVizz.Entity
         }
 
         public Element Clone() => new Element(Start, End, Value);
-        public void Draw(Graphics graphics, int tk)
+
+        public void Draw(Graphics? graphics, int tk)
         {
-            var pen = new Pen(Color.Red, tk);
+            if (graphics is null) return;
+            using var pen = new Pen(Color.Red, tk);
             graphics.DrawLine(pen, Start, End);
         }
 
-        public void Eraser(Graphics graphics, int tk)
+        public void Eraser(Graphics? graphics, int tk)
         {
-            var pen = new Pen(Color.Black, tk);
+            if (graphics is null) return;
+            using var pen = new Pen(Color.Black, tk);
             graphics.DrawLine(pen, Start, End);
         }
 
-        public void Selected(Graphics graphics, int tk)
+        public void Selected(Graphics? graphics, int tk)
         {
-            var pen = new Pen(Color.Green, tk);
+            if (graphics is null) return;
+            using var pen = new Pen(Color.Green, tk);
             graphics.DrawLine(pen, Start, End);
         }
-        public void SelectedOne(Graphics graphics, int tk)
+
+        public void SelectedOne(Graphics? graphics, int tk)
         {
-            var pen = new Pen(Color.Purple, tk);
+            if (graphics is null) return;
+            using var pen = new Pen(Color.Purple, tk);
             graphics.DrawLine(pen, Start, End);
         }
     }
